@@ -67,17 +67,28 @@
                      (relation-asserted marks-higher)
                      (response No)
                      (valid-answers No Yes))))
+
 (defrule determine-study ""
-
+    (or
    (logical (marks-higher Yes))
-
+   (logical (done-this No))
+    )
    =>
 
    (assert (UI-state (display StudyHardQuestion)
                      (relation-asserted study-hard)
-                     (response Maybe)
-                     (valid-answers Maybe Yes))))
+                     (response No)
+                     (valid-answers No Maybe Yes))))
+(defrule determine-done-this ""
 
+   (logical (work Next))
+
+   =>
+
+   (assert (UI-state (display DoneThisQuestion)
+                     (relation-asserted done-this)
+                     (response No)
+                     (valid-answers No Yes))))
 (defrule determine-help-society ""
 
    (logical (university Next))
@@ -88,13 +99,33 @@
                      (relation-asserted help-society)
                      (response No)
                      (valid-answers No Yes))))
+(defrule determine-languages ""
+
+   (logical (help-society Yes))
+
+   =>
+
+   (assert (UI-state (display LanguagesQuestion)
+                     (relation-asserted languages)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-rich ""
+
+   (logical (languages Yes))
+
+   =>
+
+   (assert (UI-state (display RichQuestion)
+                     (relation-asserted rich)
+                     (response No)
+                     (valid-answers No Yes))))
+
 
 ;;;****************
 ;;;* STATEMENTS RULES *
 ;;;****************
 
-(defrule determine-hippie ""
-
+(defrule statement-hippie ""
    (logical (responsible-job No))
 
    =>
@@ -104,7 +135,7 @@
                      (response Next)
                      (valid-answers Next))))
 
-(defrule determine-university ""
+(defrule statement-university ""
 
    (logical (study-hard Yes))
 
@@ -112,6 +143,77 @@
 
    (assert (UI-state (display UniversityStatement)
                      (relation-asserted university)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-work ""
+
+   (logical (study-hard Maybe))
+
+   =>
+
+   (assert (UI-state (display WorkStatement)
+                     (relation-asserted work)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-pension ""
+
+   (logical (done-this Yes))
+
+   =>
+
+   (assert (UI-state (display PensionStatement)
+                     (relation-asserted pension)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-lawyer ""
+
+   (logical (help-society No))
+
+   =>
+
+   (assert (UI-state (display LawyerStatement)
+                     (relation-asserted lawyer)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-parliment ""
+
+   (logical (lawyer Next))
+
+   =>
+
+   (assert (UI-state (display ParliamentStatement)
+                     (relation-asserted parliament)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-senate ""
+
+   (logical (parliament Next))
+
+   =>
+
+   (assert (UI-state (display SenateStatement)
+                     (relation-asserted senate)
+                     (response Next)
+                     (valid-answers Next))))
+
+(defrule flowsheet-can-not-help ""
+
+   (logical (rich Yes))
+
+   =>
+
+   (assert (UI-state (display FlowSheetCanNotHelpStatement)
+                     (relation-asserted flow-sheet)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule someone-else ""
+
+   (logical (flow-sheet Next))
+
+   =>
+
+   (assert (UI-state (display SomeoneElseStatement)
+                     (relation-asserted someone-else)
                      (response Next)
                      (valid-answers Next))))
 
@@ -123,9 +225,20 @@
 (defrule stop ""
     (or
    (logical (hippie Next))
+   (logical (senate Next))
+   (logical (pension Next))
+   )
    =>
 
    (assert (UI-state (display Stop)
+                     (state final))))
+
+
+(defrule go-away ""
+   (logical (someone-else Next))
+   =>
+
+   (assert (UI-state (display GoAway)
                      (state final))))
 
 
