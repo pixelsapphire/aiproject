@@ -46,243 +46,89 @@
 ;;;* QUERY RULES *
 ;;;***************
 
-(defrule determine-engine-state ""
+(defrule determine-responsible-job ""
 
    (logical (start))
 
    =>
 
    (assert (UI-state (display StartQuestion)
-                     (relation-asserted engine-starts)
+                     (relation-asserted responsible-job)
                      (response No)
                      (valid-answers No Yes))))
    
-(defrule determine-runs-normally ""
+(defrule determine-marks-higher ""
 
-   (logical (engine-starts Yes))
+   (logical (responsible-job Yes))
 
    =>
 
-   (assert (UI-state (display RunQuestion)
-                     (relation-asserted runs-normally)
+   (assert (UI-state (display MarksQuestion)
+                     (relation-asserted marks-higher)
                      (response No)
                      (valid-answers No Yes))))
+(defrule determine-study ""
 
-(defrule determine-rotation-state ""
-
-   (logical (engine-starts No))
-
-   =>
-
-   (assert (UI-state (display RotateQuestion)
-                     (relation-asserted engine-rotates)
-                     (response No)
-                     (valid-answers No Yes))))
-   
-(defrule determine-sluggishness ""
-
-   (logical (runs-normally No))
+   (logical (marks-higher Yes))
 
    =>
 
-   (assert (UI-state (display SluggishQuestion)
-                     (relation-asserted engine-sluggish)
-                     (response No)
-                     (valid-answers No Yes))))
-   
-(defrule determine-misfiring ""
+   (assert (UI-state (display StudyHardQuestion)
+                     (relation-asserted study-hard)
+                     (response Maybe)
+                     (valid-answers Maybe Yes))))
 
-   (logical (runs-normally No))
+(defrule determine-help-society ""
 
-   =>
-
-   (assert (UI-state (display MisfireQuestion)
-                     (relation-asserted engine-misfires)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-knocking ""
-
-   (logical (runs-normally No))
+   (logical (university Next))
 
    =>
 
-   (assert (UI-state (display KnockQuestion)
-                     (relation-asserted engine-knocks)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-low-output ""
-
-   (logical (runs-normally No))
-
-   =>
-
-   (assert (UI-state (display OutputQuestion)
-                     (relation-asserted engine-output-low)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-gas-level ""
-
-   (logical (engine-starts No)
-
-            (engine-rotates Yes))
-
-   =>
-
-   (assert (UI-state (display GasQuestion)
-                     (relation-asserted tank-has-gas)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-battery-state ""
-  
-   (logical (engine-rotates No))
-
-   =>
-   
-   (assert (UI-state (display BatteryQuestion)
-                     (relation-asserted battery-has-charge)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-point-surface-state ""
-
-   (or (logical (engine-starts No)  
-   
-                (engine-rotates Yes))
-                     
-       (logical (engine-output-low Yes)))
-
-   =>
-
-   (assert (UI-state (display PointsQuestion)
-                     (relation-asserted point-surface-state)
-                     (response Normal)
-                     (valid-answers Normal Burned Contaminated))))
-
-(defrule determine-conductivity-test ""
-   
-   (logical (engine-starts No)  
-   
-            (engine-rotates No)
-            
-            (battery-has-charge Yes))
-
-   =>
-
-   (assert (UI-state (display CoilQuestion)
-                     (relation-asserted conductivity-test-positive)
+   (assert (UI-state (display HelpSocietyQuestion)
+                     (relation-asserted help-society)
                      (response No)
                      (valid-answers No Yes))))
 
 ;;;****************
-;;;* REPAIR RULES *
+;;;* STATEMENTS RULES *
 ;;;****************
 
-(defrule normal-engine-state-conclusions ""
+(defrule determine-hippie ""
 
-   (logical (runs-normally Yes))
-   
-   =>
-
-   (assert (UI-state (display NoRepair)
-                     (state final))))
-
-(defrule engine-sluggish ""
-
-   (logical (engine-sluggish Yes))
-   
-   =>
-
-   (assert (UI-state (display FuelLineRepair)
-                     (state final))))
-
-(defrule engine-misfires ""
-
-   (logical (engine-misfires Yes))
+   (logical (responsible-job No))
 
    =>
 
-   (assert (UI-state (display PointGapRepair)
-                     (state final))))
+   (assert (UI-state (display HippieStatement)
+                     (relation-asserted hippie)
+                     (response Next)
+                     (valid-answers Next))))
 
-(defrule engine-knocks ""
+(defrule determine-university ""
 
-   (logical (engine-knocks Yes))
-
-   =>
-
-   (assert (UI-state (display AdjustTimingRepair)
-                     (state final))))
-
-(defrule tank-out-of-gas ""
-
-   (logical (tank-has-gas No))
+   (logical (study-hard Yes))
 
    =>
 
-   (assert (UI-state (display AddGasRepair)
-                     (state final))))
-   
-(defrule battery-dead ""
+   (assert (UI-state (display UniversityStatement)
+                     (relation-asserted university)
+                     (response Next)
+                     (valid-answers Next))))
 
-   (logical (battery-has-charge No))
-   
+
+;;;****************
+;;;* ENDING RULES *
+;;;****************
+
+(defrule stop ""
+    (or
+   (logical (hippie Next))
    =>
 
-   (assert (UI-state (display ReplaceBatteryRepair)
-                     (state final))))
-   
-(defrule point-surface-state-burned ""
-
-   (logical (point-surface-state Burned))
-
-   =>
-
-   (assert (UI-state (display ReplacePointsRepair)
-                     (state final))))
-                     
-(defrule point-surface-state-contaminated ""
-   
-   (logical (point-surface-state Contaminated))
-   
-   =>
-
-   (assert (UI-state (display CleanPointsRepair)
+   (assert (UI-state (display Stop)
                      (state final))))
 
-(defrule conductivity-test-positive-yes ""
 
-   (logical (conductivity-test-positive Yes))
-   
-   =>
-
-   (assert (UI-state (display LeadWireRepair)
-                     (state final))))
-                     
-(defrule conductivity-test-positive-no ""
-
-   (logical (conductivity-test-positive No))
-      
-   =>
-
-   (assert (UI-state (display CoilRepair)
-                     (state final))))
-                     
-(defrule no-repairs ""
-
-   (declare (salience -10))
-  
-   (logical (UI-state (id ?id)))
-   
-   (state-list (current ?id))
-     
-   =>
-  
-   (assert (UI-state (display MechanicRepair)
-                     (state final))))
                      
 ;;;*************************
 ;;;* GUI INTERACTION RULES *
