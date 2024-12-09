@@ -100,9 +100,10 @@
                      (response No)
                      (valid-answers No Yes))))
 (defrule determine-languages ""
-
-   (logical (help-society Yes))
-
+    (or
+    (logical (help-society Yes))
+    (logical (remedial Next))
+    )
    =>
 
    (assert (UI-state (display LanguagesQuestion)
@@ -119,10 +120,29 @@
                      (relation-asserted rich)
                      (response No)
                      (valid-answers No Yes))))
+(defrule determine-practical ""
 
+   (logical (rich No))
 
+   =>
+
+   (assert (UI-state (display PracticalQuestion)
+                     (relation-asserted practical)
+                     (response No)
+                     (valid-answers No Yes))))
+
+(defrule determine-endless ""
+
+   (logical (practical Yes))
+
+   =>
+
+   (assert (UI-state (display EndlessQuestion)
+                     (relation-asserted endless)
+                     (response No)
+                     (valid-answers No Yes))))
 ;;;****************
-;;;* STATEMENTS RULES *
+;;;* UNIQUE STATEMENTS RULES *
 ;;;****************
 
 (defrule statement-hippie ""
@@ -195,10 +215,37 @@
                      (relation-asserted senate)
                      (response Next)
                      (valid-answers Next))))
+(defrule statement-remedial ""
+
+   (logical (languages No))
+
+   =>
+
+   (assert (UI-state (display RemedialStatement)
+                     (relation-asserted remedial)
+                     (response Next)
+                     (valid-answers Next))))
+
+
+;;;****************
+;;;* UNIVERSAL STATEMENTS RULES *
+;;;****************
+(defrule statement-unrealistic""
+
+   (logical (endless Yes))
+
+   =>
+
+   (assert (UI-state (display UnrealisticStatement)
+                     (relation-asserted unrealistic)
+                     (response Next)
+                     (valid-answers Next))))
 
 (defrule flowsheet-can-not-help ""
-
+   (or
+   (logical (unrealistic Next))
    (logical (rich Yes))
+   )
 
    =>
 
@@ -219,7 +266,7 @@
 
 
 ;;;****************
-;;;* ENDING RULES *
+;;;* UNIVERSAL ENDING RULES *
 ;;;****************
 
 (defrule stop ""
@@ -241,8 +288,18 @@
    (assert (UI-state (display GoAway)
                      (state final))))
 
+;;;****************
+;;;* JOB ENDING RULES *
+;;;****************
 
-                     
+(defrule statistician ""
+   (logical (practical No))
+   =>
+
+   (assert (UI-state (display StatisticianJob)
+                     (state final))))
+
+
 ;;;*************************
 ;;;* GUI INTERACTION RULES *
 ;;;*************************
