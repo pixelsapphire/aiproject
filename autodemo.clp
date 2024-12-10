@@ -54,7 +54,7 @@
 
    (assert (UI-state (display StartQuestion)
                      (relation-asserted responsible-job)
-                     (response No)
+                     (response Yes)
                      (valid-answers No Yes))))
    
 (defrule determine-marks-higher ""
@@ -65,10 +65,10 @@
 
    (assert (UI-state (display MarksQuestion)
                      (relation-asserted marks-higher)
-                     (response No)
+                     (response Yes)
                      (valid-answers No Yes))))
 
-(defrule determine-study ""
+(defrule determine-study-hard ""
     (or
    (logical (marks-higher Yes))
    (logical (done-this No))
@@ -77,7 +77,7 @@
 
    (assert (UI-state (display StudyHardQuestion)
                      (relation-asserted study-hard)
-                     (response No)
+                     (response Yes)
                      (valid-answers No Maybe Yes))))
 (defrule determine-done-this ""
 
@@ -97,7 +97,7 @@
 
    (assert (UI-state (display HelpSocietyQuestion)
                      (relation-asserted help-society)
-                     (response No)
+                     (response Yes)
                      (valid-answers No Yes))))
 (defrule determine-languages ""
     (or
@@ -108,7 +108,7 @@
 
    (assert (UI-state (display LanguagesQuestion)
                      (relation-asserted languages)
-                     (response No)
+                     (response Yes)
                      (valid-answers No Yes))))
 (defrule determine-rich ""
 
@@ -128,7 +128,7 @@
 
    (assert (UI-state (display PracticalQuestion)
                      (relation-asserted practical)
-                     (response No)
+                     (response Yes)
                      (valid-answers No Yes))))
 
 (defrule determine-endless ""
@@ -141,6 +141,166 @@
                      (relation-asserted endless)
                      (response No)
                      (valid-answers No Yes))))
+
+(defrule determine-science ""
+
+   (logical (endless No))
+
+   =>
+
+   (assert (UI-state (display ScienceQuestion)
+                     (relation-asserted science)
+                     (response Yes)
+                     (valid-answers No Yes))))
+
+(defrule determine-math ""
+
+   (logical (science Yes))
+
+   =>
+
+   (assert (UI-state (display MathQuestion)
+                     (relation-asserted math)
+                     (response Yes)
+                     (valid-answers No Yes))))
+
+(defrule determine-math-good ""
+
+   (logical (math Yes))
+
+   =>
+
+   (assert (UI-state (display MathGoodQuestion)
+                     (relation-asserted math-good)
+                     (response Yes)
+                     (valid-answers No Yes))))
+(defrule determine-logic ""
+
+   (logical (math-good Yes))
+
+   =>
+
+   (assert (UI-state (display LogicQuestion)
+                     (relation-asserted logic)
+                     (response Yes)
+                     (valid-answers No Yes))))
+(defrule determine-application ""
+
+   (logical (logic Yes))
+
+   =>
+
+   (assert (UI-state (display ApplicationQuestion)
+                     (relation-asserted application)
+                     (response Yes)
+                     (valid-answers No Yes))))
+(defrule determine-math-a-lot ""
+
+   (logical (tuition Next))
+
+   =>
+
+   (assert (UI-state (display MathALotQuestion)
+                     (relation-asserted math-a-lot)
+                     (response Yes)
+                     (valid-answers No Yes))))
+(defrule determine-electronics ""
+
+   (logical (math-a-lot Yes))
+
+   =>
+
+   (assert (UI-state (display ElectronicsQuestion)
+                     (relation-asserted electronics)
+                     (response Yes)
+                     (valid-answers No Yes))))
+(defrule determine-wish ""
+
+   (logical (electrical Next))
+
+   =>
+
+   (assert (UI-state (display WishQuestion)
+                     (relation-asserted wish)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-graduate ""
+
+   (logical (wish No))
+
+   =>
+
+   (assert (UI-state (display GraduateQuestion)
+                     (relation-asserted graduate)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-administration ""
+
+   (logical (graduate Yes))
+
+   =>
+
+   (assert (UI-state (display AdministrationQuestion)
+                     (relation-asserted administration)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-math-really ""
+
+   (logical (administration No))
+
+   =>
+
+   (assert (UI-state (display MathReallyQuestion)
+                     (relation-asserted math-really)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-teaching ""
+    (or
+    (logical (graduate-degree Next))
+    (logical (business Next))
+    )
+   =>
+
+   (assert (UI-state (display TeachingQuestion)
+                     (relation-asserted teaching)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-research ""
+    (logical (teaching No))
+   =>
+
+   (assert (UI-state (display ResearchQuestion)
+                     (relation-asserted research)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-sales ""
+    (or
+    (logical (graduate No))
+    (logical (research No))
+    )
+   =>
+
+   (assert (UI-state (display SalesQuestion)
+                     (relation-asserted sales)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-management ""
+    (logical (sales No))
+   =>
+
+   (assert (UI-state (display ManagementQuestion)
+                     (relation-asserted management)
+                     (response No)
+                     (valid-answers No Yes))))
+(defrule determine-own-business ""
+    (logical (sales No))
+   =>
+
+   (assert (UI-state (display OwnBusinessQuestion)
+                     (relation-asserted own-business)
+                     (response No)
+                     (valid-answers No Yes))))
+
 ;;;****************
 ;;;* UNIQUE STATEMENTS RULES *
 ;;;****************
@@ -225,8 +385,76 @@
                      (relation-asserted remedial)
                      (response Next)
                      (valid-answers Next))))
+(defrule statement-aptitude ""
 
+   (logical (application Yes))
 
+   =>
+
+   (assert (UI-state (display AptitudeStatement)
+                     (relation-asserted aptitude)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-college ""
+
+   (logical (aptitude Next))
+
+   =>
+
+   (assert (UI-state (display CollegeStatement)
+                     (relation-asserted college)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-tuition ""
+
+   (logical (college Next))
+
+   =>
+
+   (assert (UI-state (display TuitionStatement)
+                     (relation-asserted tuition)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-electrical ""
+
+   (logical (electronics Yes))
+
+   =>
+
+   (assert (UI-state (display ElectricalStatement)
+                     (relation-asserted electrical)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-business ""
+
+   (logical (administration Yes))
+
+   =>
+
+   (assert (UI-state (display BusinessStatement)
+                     (relation-asserted business)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-graduate-degree ""
+
+    (logical (math-really Yes))
+
+   =>
+
+   (assert (UI-state (display GraduateDegreeStatement)
+                     (relation-asserted graduate-degree)
+                     (response Next)
+                     (valid-answers Next))))
+(defrule statement-years-experience ""
+
+    (logical (own-business Yes))
+
+   =>
+
+   (assert (UI-state (display YearsExperienceStatement)
+                     (relation-asserted years-experience)
+                     (response Next)
+                     (valid-answers Next))))
 ;;;****************
 ;;;* UNIVERSAL STATEMENTS RULES *
 ;;;****************
@@ -245,6 +473,7 @@
    (or
    (logical (unrealistic Next))
    (logical (rich Yes))
+   (logical (science No))
    )
 
    =>
@@ -298,8 +527,72 @@
 
    (assert (UI-state (display StatisticianJob)
                      (state final))))
+(defrule field-biologist ""
+   (logical (math No))
+   =>
 
+   (assert (UI-state (display FieldBiologistJob)
+                     (state final))))
+(defrule technical-journalist ""
+   (logical (math-good No))
+   =>
 
+   (assert (UI-state (display TechnicalJournalistJob)
+                     (state final))))
+(defrule research-scientist""
+   (logical (application No))
+   =>
+
+   (assert (UI-state (display ResearchScientistJob)
+                     (state final))))
+(defrule still-research-scientist""
+   (logical (wish Yes))
+   =>
+
+   (assert (UI-state (display StillResearchScientistJob)
+                     (state final))))
+(defrule other-field""
+   (logical (math-really No))
+   =>
+
+   (assert (UI-state (display OtherFieldJob)
+                     (state final))))
+(defrule professor""
+   (logical (teaching Yes))
+   =>
+
+   (assert (UI-state (display ProfessorJob)
+                     (state final))))
+(defrule research-department ""
+    (logical (research Yes))
+    =>
+
+    (assert (UI-state (display ResearchDepartmentJob)
+                      (state final))))
+(defrule technical-rep ""
+    (logical (sales Yes))
+    =>
+
+    (assert (UI-state (display TechnicalRepJob)
+                      (state final))))
+(defrule technical-staff ""
+    (logical (management Yes))
+    =>
+
+    (assert (UI-state (display TechnicalStaffJob)
+                      (state final))))
+(defrule production-staff ""
+    (logical (own-business No))
+    =>
+
+    (assert (UI-state (display ProductionStaffJob)
+                      (state final))))
+(defrule consulting ""
+    (logical (years-experience Next))
+    =>
+
+    (assert (UI-state (display ConsultingJob)
+                      (state final))))
 ;;;*************************
 ;;;* GUI INTERACTION RULES *
 ;;;*************************
