@@ -16,7 +16,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @SuppressWarnings("CallToPrintStackTrace")
-public class AutoDemo implements ActionListener {
+public class EngineeringES implements ActionListener {
 
     private final JLabel displayLabel;
     private final JButton nextButton;
@@ -28,15 +28,15 @@ public class AutoDemo implements ActionListener {
     private ButtonGroup choicesButtons;
     private ResourceBundle autoResources;
 
-    public AutoDemo() {
+    public EngineeringES() {
         try {
-            autoResources = ResourceBundle.getBundle("AutoResources", Locale.getDefault());
+            autoResources = ResourceBundle.getBundle("EngineeringES", Locale.getDefault());
         } catch (MissingResourceException mre) {
             mre.printStackTrace();
             System.exit(0);
         }
 
-        final JFrame window = new JFrame(autoResources.getString("AutoDemo"));
+        final JFrame window = new JFrame(autoResources.getString("EngineeringES"));
         window.getContentPane().setLayout(new GridLayout(3, 1));
         window.setSize(350, 200);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,15 +65,15 @@ public class AutoDemo implements ActionListener {
         window.getContentPane().add(buttonPanel);
 
         clips = new Environment();
-        clips.load("autodemo.clp");
+        clips.load("engineering_es.clp");
         clips.reset();
-        runAuto();
+        runES();
 
         window.setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(AutoDemo::new);
+        SwingUtilities.invokeLater(EngineeringES::new);
     }
 
     private void nextUIState() throws Exception {
@@ -142,17 +142,17 @@ public class AutoDemo implements ActionListener {
         if (event.getActionCommand().equals("Next")) {
             if (choicesButtons.getButtonCount() == 0) clips.assertString("(next " + currentID + ")");
             else clips.assertString("(next " + currentID + " " + choicesButtons.getSelection().getActionCommand() + ")");
-            runAuto();
+            runES();
         } else if (event.getActionCommand().equals("Restart")) {
             clips.reset();
-            runAuto();
+            runES();
         } else if (event.getActionCommand().equals("Prev")) {
             clips.assertString("(prev " + currentID + ")");
-            runAuto();
+            runES();
         }
     }
 
-    public void runAuto() {
+    public void runES() {
         isExecuting = true;
         executionThread = new Thread(() -> {
             clips.run();

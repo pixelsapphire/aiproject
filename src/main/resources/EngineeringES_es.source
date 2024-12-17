@@ -1,7 +1,7 @@
 ﻿# Properties Source File for Spanish
 # Generate the properties file from this file using the following command:
 # native2ascii -encoding UTF-8 AutoResources_es.source AutoResources_es.properties
-AutoDemo=Demostración de Automóviles
+EngineeringES=Demostración de Automóviles
 No=No
 Yes=Sí
 Normal=Normal
