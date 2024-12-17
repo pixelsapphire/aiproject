@@ -2,7 +2,6 @@ package com.pixelsapphire.aiproject;
 
 import CLIPSJNI.Environment;
 import CLIPSJNI.PrimitiveValue;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.Container;
@@ -167,7 +166,7 @@ public class EngineeringES implements ActionListener {
         executionThread.start();
     }
 
-    private void wrapLabelText(@NotNull JLabel label, @NotNull String text) {
+    private void wrapLabelText(JLabel label, String text) {
         final FontMetrics fm = label.getFontMetrics(label.getFont());
         final Container container = label.getParent();
         final int containerWidth = container.getWidth();
