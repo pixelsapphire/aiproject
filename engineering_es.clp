@@ -282,7 +282,7 @@
 (defrule determine-college-chemistry ""
   (logical (electronics No))
   =>
-  (assert (UI-state (display CollegeChemistryQuestion)
+  (assert (UI-state (display ChemistryQuestion)
                     (relation-asserted college-chemistry)
                     (response No)
                     (valid-answers No Yes)))
@@ -407,7 +407,7 @@
 (defrule determine-school-electronics ""
   (logical (outdoor No))
   =>
-  (assert (UI-state (display SchoolElectronicsQuestion)
+  (assert (UI-state (display ElectronicsQuestion)
                     (relation-asserted school-electronics)
                     (response No)
                     (valid-answers No Yes)))
@@ -868,7 +868,7 @@
 (defrule calendar ""
   (logical (chemistry No))
   =>
-  (assert (UI-state (display Calendar)
+  (assert (UI-state (display CalendarStatement)
                     (state final)))
 )
 
