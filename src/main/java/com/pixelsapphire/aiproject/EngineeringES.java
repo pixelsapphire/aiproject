@@ -111,7 +111,7 @@ public class EngineeringES implements ActionListener {
             else rButton = new JRadioButton(autoResources.getString(bv.toString()), false);
 
             rButton.setActionCommand(bv.toString());
-            choicesPanel.add(rButton);
+            if (pv.size() > 1) choicesPanel.add(rButton);
             choicesButtons.add(rButton);
         }
 
