@@ -280,17 +280,19 @@
 )
 
 (defrule determine-college-chemistry ""
+  (logical (college Next))
   (logical (electronics No))
   =>
   (assert (UI-state (display ChemistryQuestion)
-                    (relation-asserted college-chemistry)
+                    (relation-asserted chemistry)
                     (response No)
                     (valid-answers No Yes)))
 )
 
 (defrule determine-geology ""
+  (logical (college Next))
   (or    
-    (logical (college-chemistry No))
+    (logical (chemistry No))
     (logical (math-a-lot No))
   )
   =>
@@ -408,13 +410,14 @@
   (logical (outdoor No))
   =>
   (assert (UI-state (display ElectronicsQuestion)
-                    (relation-asserted school-electronics)
+                    (relation-asserted electronics)
                     (response No)
                     (valid-answers No Yes)))
 )
 
 (defrule determine-shop ""
-  (logical (school-electronics No))
+  (logical (further-schooling Yes))
+  (logical (electronics No))
   =>
   (assert (UI-state (display ShopQuestion)
                     (relation-asserted shop)
@@ -560,6 +563,7 @@
 )
 
 (defrule statement-electrical ""
+  (logical (college Next))
   (logical (electronics Yes))
   =>
   (assert (UI-state (display ElectricalStatement)
@@ -578,7 +582,8 @@
 )
 
 (defrule statement-chemical ""
-  (logical (college-chemistry Yes))
+  (logical (college Next))
+  (logical (chemistry Yes))
   =>
   (assert (UI-state (display ChemicalStatement)
                     (relation-asserted chemical)
@@ -831,7 +836,8 @@
 )
 
 (defrule electronics ""
-  (logical (school-electronics Yes))
+  (logical (further-schooling Yes))
+  (logical (electronics Yes))
   =>
   (assert (UI-state (display ElectronicsCourse)
                     (state final)))
@@ -859,6 +865,7 @@
 )
 
 (defrule chemical ""
+  (logical (further-schooling Yes))
   (logical (chemistry Yes))
   =>
   (assert (UI-state (display ChemicalCourse)
@@ -866,6 +873,7 @@
 )
 
 (defrule calendar ""
+  (logical (further-schooling Yes))
   (logical (chemistry No))
   =>
   (assert (UI-state (display CalendarStatement)
