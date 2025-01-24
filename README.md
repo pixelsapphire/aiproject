@@ -1,7 +1,7 @@
 ## System ekspercki _"Should you be an engineer?"_
 
 ### Autorzy:
-- **Olga Karaś (151992)**
+- **Olga Karaś (155992)**
 - **Alex Pawelski (147412)**
 
 ### Język i zależności:
